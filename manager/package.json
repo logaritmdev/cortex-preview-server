@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon -L -P 1500 index.js",
+    "prod": "NODE_ENV=production pm2-docker index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.1",
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "express-body-parser-json-error": "^0.1.0",
+    "express-graphql": "^0.6.7",
+    "express-json-errors": "^1.0.5",
+    "graphql": "^0.10.5",
+    "morgan": "^1.8.2",
+    "mysql2": "^1.4.0",
+    "sequelize": "^4.4.10",
+    "ws": "^3.2.0"
+  }
+}
