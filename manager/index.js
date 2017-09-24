@@ -44,24 +44,6 @@ var wss = null
 
 	wss.on('connection', async (ws, req) => {
 
-		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-
-		console.log('User connected from ' + ip)
-
-		var access = await DB.Access.find({where: {ip}})
-		if (access == null) {
-
-			var data = JSON.stringify({
-				type: 'ERROR',
-				data: {
-					message: 'The IP address ' + ip + ' is not allowed to use this service.'
-				}
-			})
-
-			ws.send(data)
-			ws.close()
-		}
-
 		const id = wsc.length
 
 		wsc.push(ws)
