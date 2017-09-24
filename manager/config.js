@@ -10,10 +10,8 @@ module.exports = {
 	clients: [
 		{
 			key: 'xsSQMSxZeYIU3sU',
-			uid: 'default',
 			ips: [
-				'localhost',
-				'kao17001.dev'
+				'::ffff:172.23.0.1'
 			]
 		}
 	]

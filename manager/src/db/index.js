@@ -22,7 +22,7 @@ const database = new Sequelize(
 
 var models = {
 	'Client': 'client',
-	'Domain': 'domain',
+	'Access': 'access',
 	'Render': 'render',
 	'Format': 'format'
 }
@@ -53,32 +53,45 @@ Object.keys(models).forEach(key => {
 
 Promise.resolve()
 
-	// .then(() => database.query('SET FOREIGN_KEY_CHECKS = 0'))
-	// .then(() => database.sync({ force: true }))
-	// .then(() => database.query('SET FOREIGN_KEY_CHECKS = 1'))
+	.then(() => database.query('SET FOREIGN_KEY_CHECKS = 0'))
+	.then(() => database.sync({ force: true }))
+	.then(() => database.query('SET FOREIGN_KEY_CHECKS = 1'))
 
-	// .then(async function() {
+	.then(async function() {
 
-	// 	const configs = require('../../config')
+		const configs = require('../../config')
 
-	// 	for (var data of configs.clients) {
+		const DB = database
 
-	// 		var client = await database.Client.create({
-	// 			key: data.key,
-	// 			uid: data.uid
-	// 		})
+		for (var data of configs.clients) {
 
-	// 		for (var domain of data.domains) {
-	// 			await database.Domain.create({
-	// 				name: domain,
-	// 				clientId: client.id
-	// 			})
-	// 		}
+			var client = await DB.Client.find({
 
-	// 	}
+				where: {
+					key: data.key
+				}
 
-	// }, function(err) {
-	// 	console.log(err)
-	// });
+			})
+
+			if (client == null) {
+				client = await DB.Client.create({key: data.key})
+			}
+
+			await DB.Access.destroy({
+
+				where: {
+					clientId: client.id
+				}
+
+			})
+
+			for (var ip of data.ips) {
+				await DB.Access.create({ip: ip, clientId: client.id})
+			}
+		}
+
+	}, function(err) {
+		console.log(err)
+	});
 
 module.exports = database

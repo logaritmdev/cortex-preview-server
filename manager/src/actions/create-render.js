@@ -26,14 +26,6 @@ module.exports = async function(wsid, ws, mq, args) {
 		throw new Error('Invalid API Key')
 	}
 
-	var domains = await DB.Domain.findAll({
-
-		where: {
-			clientId: client.id
-		}
-
-	})
-
 	var render = await DB.Render.find({
 
 		where: {
