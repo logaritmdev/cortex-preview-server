@@ -3,3 +3,4 @@
 /renderer/node_modules
 /manager/node_modules
 /manager/data
+/manager/config.js
