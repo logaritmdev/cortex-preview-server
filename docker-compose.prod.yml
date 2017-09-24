@@ -5,7 +5,7 @@ services:
     image: nginx:1.13.3
     volumes:
       - ./manager:/app
-      - ./manager/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ./manager/nginx.prod.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 80:80
     logging:
@@ -30,14 +30,15 @@ services:
         max-size: 150m
     depends_on:
       - mysql
+      - rabbitmq
     environment:
       MYSQL_HOSTNAME: "mysql"
       MYSQL_DATABASE: "cortex"
       MYSQL_USER: "root"
       MYSQL_PASS: "bHs2VOXyVwaFkNR"
       RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_USER: "cortex"
-      RABBITMQ_PASS: "37BeTD2KLd2eVBn"
+      RABBITMQ_USER: "cortexmq"
+      RABBITMQ_PASS: "9R5T125c7737Zqx"
       RABBITMQ_RENDER_QUEUE: "render_queue"
       RABBITMQ_RESULT_QUEUE: "result_queue"
       RENDER_FOLDER: "renders"
@@ -53,10 +54,12 @@ services:
     logging:
       options:
         max-size: 150m
+    depends_on:
+      - rabbitmq
     environment:
       RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_USER: "cortex"
-      RABBITMQ_PASS: "37BeTD2KLd2eVBn"
+      RABBITMQ_USER: "cortexmq"
+      RABBITMQ_PASS: "9R5T125c7737Zqx"
       RABBITMQ_RENDER_QUEUE: "render_queue"
       RABBITMQ_RESULT_QUEUE: "result_queue"
 
@@ -67,8 +70,8 @@ services:
       - "15672:15672"
       - "5672:5672"
     environment:
-      RABBITMQ_DEFAULT_USER: "cortex"
-      RABBITMQ_DEFAULT_PASS: "37BeTD2KLd2eVBn"
+      RABBITMQ_DEFAULT_USER: "cortexmq"
+      RABBITMQ_DEFAULT_PASS: "9R5T125c7737Zqx"
 
   mysql:
     image: mysql:5.7.19

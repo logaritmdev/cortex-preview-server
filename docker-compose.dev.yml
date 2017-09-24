@@ -30,14 +30,15 @@ services:
         max-size: 150m
     depends_on:
       - mysql
+      - rabbitmq
     environment:
       MYSQL_HOSTNAME: "mysql"
       MYSQL_DATABASE: "cortex"
       MYSQL_USER: "root"
       MYSQL_PASS: "123"
       RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_USER: "user"
-      RABBITMQ_PASS: "pass"
+      RABBITMQ_USER: "cortexmq"
+      RABBITMQ_PASS: "9R5T125c7737Zqx"
       RABBITMQ_RENDER_QUEUE: "render_queue"
       RABBITMQ_RESULT_QUEUE: "result_queue"
       RENDER_FOLDER: "renders"
@@ -53,10 +54,12 @@ services:
     logging:
       options:
         max-size: 150m
+    depends_on:
+      - rabbitmq
     environment:
       RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_USER: "user"
-      RABBITMQ_PASS: "pass"
+      RABBITMQ_USER: "cortexmq"
+      RABBITMQ_PASS: "9R5T125c7737Zqx"
       RABBITMQ_RENDER_QUEUE: "render_queue"
       RABBITMQ_RESULT_QUEUE: "result_queue"
 
@@ -67,8 +70,8 @@ services:
       - "15672:15672"
       - "5672:5672"
     environment:
-      RABBITMQ_DEFAULT_USER: "user"
-      RABBITMQ_DEFAULT_PASS: "pass"
+      RABBITMQ_DEFAULT_USER: "cortexmq"
+      RABBITMQ_DEFAULT_PASS: "9R5T125c7737Zqx"
 
   mysql:
     image: mysql:5.7.19
