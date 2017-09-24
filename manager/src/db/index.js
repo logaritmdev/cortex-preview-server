@@ -22,7 +22,6 @@ const database = new Sequelize(
 
 var models = {
 	'Client': 'client',
-	'Access': 'access',
 	'Render': 'render',
 	'Format': 'format'
 }
@@ -75,18 +74,6 @@ Promise.resolve()
 
 			if (client == null) {
 				client = await DB.Client.create({key: data.key})
-			}
-
-			await DB.Access.destroy({
-
-				where: {
-					clientId: client.id
-				}
-
-			})
-
-			for (var ip of data.ips) {
-				await DB.Access.create({ip: ip, clientId: client.id})
 			}
 		}
 

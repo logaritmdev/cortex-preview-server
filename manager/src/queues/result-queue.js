@@ -23,6 +23,10 @@ module.exports = async function(chan, message, wss, wsc) {
 		var format = formats[i]
 		var result = results[i]
 
+		if (result == null) {
+			continue
+		}
+
 		format = await DB.Format.find({
 
 			where: {

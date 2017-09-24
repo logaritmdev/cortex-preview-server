@@ -59,12 +59,20 @@ module.exports = async function(chan, message) {
 			fullPage: true
 		}
 
-		const page = await browser.newPage()
-		await page.setViewport(viewport)
-		await page.goto(url)
-		await page.screenshot(screenshot)
+		try {
 
-		render.results.push(dest)
+			const page = await browser.newPage()
+			await page.setViewport(viewport)
+			await page.goto(url)
+			await page.screenshot(screenshot)
+
+			render.results.push(dest)
+
+		} catch (error) {
+
+			render.results.push(null)
+
+		}
 	}
 
 	await browser.close()
