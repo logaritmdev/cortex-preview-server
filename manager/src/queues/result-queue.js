@@ -75,6 +75,8 @@ module.exports = async function(chan, message, wss, wsc) {
 		})
 
 		ws.send(action)
+
+		console.log('Manager: Notified client')
 	}
 
 	chan.ack(message)

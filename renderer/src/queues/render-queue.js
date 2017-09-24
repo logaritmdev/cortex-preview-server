@@ -77,6 +77,8 @@ module.exports = async function(chan, message) {
 
 	await browser.close()
 
+	console.info('Renderer: Completed rendering')
+
 	await chan.ack(message)
 	await chan.sendToQueue(RABBITMQ_RESULT_QUEUE, new Buffer(JSON.stringify(render)), {persistent: true})
 }
