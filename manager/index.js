@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const amqp = require('amqplib')
+const https = require('https')
 const WebSocket = require('ws')
 const DB = require('./src/db')
 
@@ -40,7 +41,23 @@ var wss = null
 		DELETE_RENDER: require('./src/actions/delete-render'),
 	}
 
+	/*
 	wss = new WebSocket.Server({port: 8080})
+	*/
+
+	const server = https.createServer({
+		cert: fs.readFileSync('./certs/cert.pem'),
+		key: fs.readFileSync('./certs/key.pem')
+	}, (req, res) => {
+	    res.writeHead(404)
+	    res.end()
+	})
+
+	wss = new WebSocket.Server({server})
+
+	server.listen(8888, () => {
+		console.log('Server Listening on port 8888')
+	})
 
 	wss.on('connection', async (ws, req) => {
 

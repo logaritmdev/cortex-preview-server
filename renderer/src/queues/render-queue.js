@@ -35,13 +35,13 @@ module.exports = async function(chan, message) {
 
 			case 'string':
 				var size = format.split('x')
-				w = size[0] || 1
-				h = size[1] || 1
+				w = size[0] || 0
+				h = size[1] || 0
 				break
 
 			case 'number':
 				w = format
-				h = 1
+				h = 0
 		}
 
 		const dest = `/tmp/${hash}-${w}-${h}.jpg`
