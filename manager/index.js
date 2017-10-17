@@ -45,11 +45,26 @@ var wss = null
 	wss = new WebSocket.Server({port: 8080})
 	*/
 
+	var ca = []
+	var chain = fs.readFileSync(path.join(__dirname, 'certs/preview.cortex.logaritm.ca.ca-bundle'), 'utf8').split('/n')
+	var lines = []
+
+	for (var line of chain) {
+		if (line) {
+			lines.push(line)
+			if (line.match('-END CERTIFICATE-')) {
+				ca.push(lines.join('\n'))
+				lines = []
+			}
+		}
+	}
+
 	const server = https.createServer({
-		cert: fs.readFileSync('./certs/cert.pem'),
-		key: fs.readFileSync('./certs/key.pem')
+		ca: ca,
+		cert: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.crt'),
+		key: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.key')
 	}, (req, res) => {
-	    res.writeHead(404)
+	    res.writeHead(200)
 	    res.end()
 	})
 
