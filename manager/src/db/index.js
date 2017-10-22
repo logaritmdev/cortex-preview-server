@@ -49,20 +49,19 @@ Object.keys(models).forEach(key => {
 /**
  * Importing clients
  */
-
 Promise.resolve()
 
 	.then(() => database.query('SET FOREIGN_KEY_CHECKS = 0'))
-	.then(() => database.sync({ force: true }))
+	.then(() => database.sync({force: process.env.NODE_ENV === 'development'}))
 	.then(() => database.query('SET FOREIGN_KEY_CHECKS = 1'))
 
 	.then(async function() {
 
-		const configs = require('../../config')
+		const config = require('../../config')
 
 		const DB = database
 
-		for (var data of configs.clients) {
+		for (var data of config.clients) {
 
 			var client = await DB.Client.find({
 
@@ -73,7 +72,10 @@ Promise.resolve()
 			})
 
 			if (client == null) {
-				client = await DB.Client.create({key: data.key})
+				client = await DB.Client.create({
+					key: data.key,
+					name: data.name
+				})
 			}
 		}
 

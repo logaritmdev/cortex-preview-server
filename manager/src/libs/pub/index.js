@@ -1,11 +1,10 @@
-const server = require('../../../config').server
-const folder = require('../../../config').folder
+const renders = require('../../../config').renders
 
 var pub = [
-	server.protocol,
-	server.hostname,
-	server.port ? (':' + port) : '',
-	folder.render,
+	renders.protocol,
+	renders.hostname,
+	renders.port ? (':' + port) : '',
+	renders.path,
 	'/'
 ].join('')
 

@@ -48,11 +48,17 @@ module.exports = async function(chan, message, wss, wsc) {
 
 		var dest = path.join(__dirname, '../../renders', format.file)
 
-		fs.createReadStream(result).pipe(
-			fs.createWriteStream(dest)
-		)
+		try {
 
-		results[i] = pub.url('renders/' + format.file)
+			fs.createReadStream(result).pipe(
+				fs.createWriteStream(dest)
+			)
+
+		} catch (e) {
+			console.log(e)
+		}
+
+		results[i] = pub.url(format.file)
 
 		try {
 			s.unlinkSync(result)

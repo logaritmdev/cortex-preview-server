@@ -54,23 +54,52 @@ module.exports = async function(chan, message) {
 			height: h
 		}
 
-		const screenshot = {
-			path: dest,
-			fullPage: true
-		}
-
 		try {
 
 			const page = await browser.newPage()
 			await page.setViewport(viewport)
 			await page.goto(url)
-			await page.screenshot(screenshot)
+
+			const size = await page.evaluate(() => {
+
+				var block = document.body.children[0]
+				if (block == null) {
+					return {width: 0, height: 0}
+				}
+
+				var style = getComputedStyle(block)
+
+				return {
+					width: block.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight),
+					height: block.offsetHeight + parseInt(style.marginTop) + parseInt(style.marginBottom)
+				}
+
+			});
+
+			await page.setViewport({
+				width: size.width,
+				height: size.height
+			})
+
+			await page.screenshot({
+				path: dest,
+				type: 'jpeg',
+				quality: 90,
+				clip: {
+					x: 0,
+					y: 0,
+					width: size.width,
+					height: size.height
+				}
+			})
 
 			render.results.push(dest)
 
 		} catch (error) {
 
 			render.results.push(null)
+
+			console.log('ERROR', error)
 
 		}
 	}

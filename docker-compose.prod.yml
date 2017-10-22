@@ -32,6 +32,7 @@ services:
       - mysql
       - rabbitmq
     environment:
+      NODE_ENV: "production"
       MYSQL_HOSTNAME: "mysql"
       MYSQL_DATABASE: "cortex"
       MYSQL_USER: "root"

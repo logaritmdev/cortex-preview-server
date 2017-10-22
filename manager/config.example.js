@@ -1,13 +1,24 @@
 module.exports = {
-	server: {
+
+	/**
+	 * Whether the WebSocket server uses SSL.
+	 */
+	ssl: false,
+
+	/**
+	 * The URL where renders are stored.
+	 */
+	renders: {
 		protocol: 'http://',
-		hostname: 'some.hostname.com', // Cortex Preview will grab images from this server
-		port: ''
+		hostname: '192.168.11.115',
+		port: '',
+		path: '/renders'
 	},
-	folder: {
-		renders: '/renders'
-	},
+
+	/**
+	 * Clients to create on startup.
+	 */
 	clients: [
-		{key: 'XXXXXXX'}
+		{key: 'Dev', name: 'Dev'}
 	]
 }

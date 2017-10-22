@@ -4,6 +4,7 @@ const amqp = require('amqplib')
 const https = require('https')
 const WebSocket = require('ws')
 const DB = require('./src/db')
+const config = require('./config')
 
 //------------------------------------------------------------------------------
 // Process
@@ -41,42 +42,50 @@ var wss = null
 		DELETE_RENDER: require('./src/actions/delete-render'),
 	}
 
-	/*
-	wss = new WebSocket.Server({port: 8080})
-	*/
+	if (config.ssl) {
 
-	var ca = []
-	var chain = fs.readFileSync(path.join(__dirname, 'certs/preview.cortex.logaritm.ca.ca-bundle'), 'utf8').split('/n')
-	var lines = []
+		var ca = []
+		var chain = fs.readFileSync(path.join(__dirname, 'certs/preview.cortex.logaritm.ca.ca-bundle'), 'utf8').split('/n')
+		var lines = []
 
-	for (var line of chain) {
-		if (line) {
-			lines.push(line)
-			if (line.match('-END CERTIFICATE-')) {
-				ca.push(lines.join('\n'))
-				lines = []
+		for (var line of chain) {
+			if (line) {
+				lines.push(line)
+				if (line.match('-END CERTIFICATE-')) {
+					ca.push(lines.join('\n'))
+					lines = []
+				}
 			}
 		}
+
+		const server = https.createServer({
+			ca: ca,
+			cert: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.crt'),
+			key: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.key')
+		}, (req, res) => {
+		    res.writeHead(200)
+		    res.end()
+		})
+
+		wss = new WebSocket.Server({server})
+
+		server.listen(8888, () => {
+			console.log('Server Listening on port 8888')
+		})
+
+	} else {
+
+		wss = new WebSocket.Server({port:8888})
+		console.log('Server Listening on port 8888')
 	}
 
-	const server = https.createServer({
-		ca: ca,
-		cert: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.crt'),
-		key: fs.readFileSync(__dirname + '/certs/preview.cortex.logaritm.ca.key')
-	}, (req, res) => {
-	    res.writeHead(200)
-	    res.end()
-	})
-
-	wss = new WebSocket.Server({server})
-
-	server.listen(8888, () => {
-		console.log('Server Listening on port 8888')
-	})
+	console.log('NODE ENV', process.env.NODE_ENV)
 
 	wss.on('connection', async (ws, req) => {
 
 		const id = wsc.length
+
+		console.log('Client connected')
 
 		wsc.push(ws)
 

@@ -6,6 +6,11 @@ module.exports = function(DB, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: false
+		},
+
+		name: {
+			type: DataTypes.STRING,
+			allowNull: false
 		}
 
 	})

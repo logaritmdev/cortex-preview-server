@@ -53,7 +53,7 @@ module.exports = async function(wsid, ws, mq, args) {
 				ver: render.ver,
 				options: JSON.parse(render.options),
 				formats: JSON.parse(render.formats),
-				results: formats.map(format => pub.url('renders/' + format.file))
+				results: formats.map(format => pub.url(format.file))
 			}
 		})
 
