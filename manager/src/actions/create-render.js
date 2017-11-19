@@ -26,45 +26,10 @@ module.exports = async function(wsid, ws, mq, args) {
 		throw new Error('Invalid API Key')
 	}
 
-	var render = await DB.Render.find({
-
-		where: {
-			url: url,
-			ver: ver
-		}
-
-	})
-
-	if (render) {
-
-		var formats = await DB.Format.findAll({
-
-			where: {
-				renderId: render.id
-			}
-
-		})
-
-		var action = JSON.stringify({
-			type: 'RENDER_COMPLETE',
-			data: {
-				id: render.id,
-				url: render.url,
-				ver: render.ver,
-				options: JSON.parse(render.options),
-				formats: JSON.parse(render.formats),
-				results: formats.map(format => pub.url(format.file))
-			}
-		})
-
-		ws.send(action)
-		return
-	}
-
 	var options = args.options || {}
 	var formats = args.formats || ['1280']
 
-	render = await DB.Render.create({
+	var render = await DB.Render.create({
 		url: url,
 		ver: ver,
 		options: JSON.stringify(options),

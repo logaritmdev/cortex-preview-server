@@ -50,9 +50,7 @@ module.exports = async function(chan, message, wss, wsc) {
 
 		try {
 
-			fs.createReadStream(result).pipe(
-				fs.createWriteStream(dest)
-			)
+			fs.writeFileSync(dest, fs.readFileSync(result))
 
 		} catch (e) {
 			console.log(e)

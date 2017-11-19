@@ -6,9 +6,11 @@ const RABBITMQ_RESULT_QUEUE = process.env.RABBITMQ_RESULT_QUEUE
 
 module.exports = async function(chan, message) {
 
+	console.info('Renderer: Received rendering')
+
 	var render = JSON.parse(message.content.toString())
 	if (render == null) {
-		chan.ack(message)
+		await chan.ack(message)
 		return
 	}
 
@@ -76,24 +78,27 @@ module.exports = async function(chan, message) {
 
 			});
 
-			await page.setViewport({
-				width: size.width,
-				height: size.height
-			})
+			if (size.height) {
 
-			await page.screenshot({
-				path: dest,
-				type: 'jpeg',
-				quality: 90,
-				clip: {
-					x: 0,
-					y: 0,
+				await page.setViewport({
 					width: size.width,
 					height: size.height
-				}
-			})
+				})
 
-			render.results.push(dest)
+				await page.screenshot({
+					path: dest,
+					type: 'jpeg',
+					quality: 90,
+					clip: {
+						x: 0,
+						y: 0,
+						width: size.width,
+						height: size.height
+					}
+				})
+
+				render.results.push(dest)
+			}
 
 		} catch (error) {
 
@@ -103,6 +108,8 @@ module.exports = async function(chan, message) {
 
 		}
 	}
+
+	console.info('Rendering: Completed screenshots')
 
 	await browser.close()
 

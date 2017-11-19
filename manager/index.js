@@ -70,7 +70,7 @@ var wss = null
 		wss = new WebSocket.Server({server})
 
 		server.listen(8888, () => {
-			console.log('Server Listening on port 8888')
+			console.log('Server Listening on port 8888 (Secure)')
 		})
 
 	} else {
