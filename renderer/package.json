@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -L -P 1500 index.js",
-    "prod": "NODE_ENV=production pm2-docker index.js"
+    "dev": "NODE_ENV=development nodemon -L -P 1500 index.js"
   },
   "author": "",
   "license": "ISC",
